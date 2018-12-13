@@ -5,7 +5,7 @@ require 'aws-sdk-opsworks'
 
 include UserHelper
 
-::Chef::Recipe.send(:include, MongoDB::Helpers::User)
+::Chef::Recipe.send(:include, UserHelper)
 
 # Obtaning mongo instnaces
 
