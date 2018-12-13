@@ -1,9 +1,9 @@
-module UserHelper
-    def user_exists?(username, connection)
+class Chef::Recipe::UserHelper
+    def self.user_exists?(username, connection)
         connection['system.users'].find(user: username).count > 0
     end
 
-    def create_admin_user()
+    def self.create_admin_user()
         require 'mongo'
         begin
             username = node['DBUser']
@@ -25,7 +25,7 @@ module UserHelper
 
     end
 
-    def create_user(username, password, roles, db, client)
+    def self.create_user(username, password, roles, db, client)
         begin
             if !user_exists?(username, client)
                 db.database.users.create(
@@ -42,7 +42,7 @@ module UserHelper
 
     end
 
-    def create_all_users()
+    def self.create_all_users()
         require 'mongo'
 
         users = []
@@ -66,5 +66,3 @@ module UserHelper
         end
     end
 end
-
-#Chef::Recipe.include(MongoDB::Helpers::User)
