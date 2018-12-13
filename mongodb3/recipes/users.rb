@@ -9,6 +9,6 @@ require 'aws-sdk-opsworks'
 
 ruby_block 'Adding Admin User' do
     block do
-        create_admin_user()
+        MongoDB::Helpers::User.create_admin_user()
     end
 end
