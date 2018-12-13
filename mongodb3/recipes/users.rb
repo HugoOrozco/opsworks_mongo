@@ -9,6 +9,8 @@ require 'aws-sdk-opsworks'
 this_instance = search("aws_opsworks_instance", "self:true").first
 layer_id = this_instance["layer_ids"][0]
 
+opsworks = Aws::OpsWorks::Client.new(:region => "#{node['Region']}")
+
 ruby_block 'Adding Admin User' do
     block do
         master_node_command = opsworks.describe_instances({

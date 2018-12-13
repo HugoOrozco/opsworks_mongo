@@ -18,7 +18,7 @@ rescue
   mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
 end
 
-opsworks = Aws::OpsWorks::Client.new(:region => "us-east-1")
+opsworks = Aws::OpsWorks::Client.new(:region => "#{node['Region']}")
 dns = Aws::Route53::Client.new(:region => "#{node['Region']}")
 
 rs_members = []
