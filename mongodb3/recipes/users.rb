@@ -2,6 +2,7 @@ include_recipe "mongodb3::mongo_gem"
 
 require 'mongo'
 require 'aws-sdk-opsworks'
+require 'users'
 
 ::Chef::Recipe.send(:include, UserHelper)
 
@@ -9,6 +10,6 @@ require 'aws-sdk-opsworks'
 
 ruby_block 'Adding Admin User' do
     block do
-        UserHelper.create_admin_user()
+        create_admin_user()
     end
 end
