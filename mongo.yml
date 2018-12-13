@@ -306,8 +306,8 @@ Resources:
         Setup:
           - mongodb3::default
         Configure:
-          - mongodb3::configure
           - mongodb3::users
+          - mongodb3::configure
         Shutdown:
           - mongodb3::shutdown
       CustomSecurityGroupIds:

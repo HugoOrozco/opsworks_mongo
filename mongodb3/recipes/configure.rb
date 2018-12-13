@@ -1,4 +1,3 @@
-include_recipe "mongodb3::mongo_gem"
 
 require 'json'
 require 'mongo'
@@ -14,7 +13,7 @@ password = node['DBPass']
 
 begin
   mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
-  mongo.database_names
+  #mongo.database_names
 rescue
   mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
 end
