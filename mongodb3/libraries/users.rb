@@ -10,10 +10,10 @@ class Chef::Recipe::UserHelper
             password = node['DBPass']
 
             begin
-                client = Mongo::Client.new([ '127.0.0.1:27017' ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
+                client = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
                 client.database_names
             rescue
-                client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
+                client = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
             end
         rescue
             Chef::Log.info "Failed to connect to database"
