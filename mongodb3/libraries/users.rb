@@ -71,3 +71,5 @@ module MongoDB
         end
     end
 end
+
+Chef::Recipe.include(MongoDB::Helpers::User)
