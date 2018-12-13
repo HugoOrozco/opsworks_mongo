@@ -2,14 +2,12 @@ module MongoDB
     module Helpers
         module User
 
-            require 'mongo'
-            require 'aws-sdk-opsworks'
-
             def user_exists?(username, connection)
                 connection['system.users'].find(user: username).count > 0
             end
 
             def create_admin_user()
+                require 'mongo'
                 begin
                     username = node['DBUser']
                     password = node['DBPass']
@@ -48,6 +46,8 @@ module MongoDB
             end
 
             def create_all_users()
+                require 'mongo'
+
                 users = []
                 roles = ['role': 'userAdminAnyDatabase', 'db': 'admin']
                 user = [{'username': 'User1', 'password': 'test', 'roles': roles}]
