@@ -2,7 +2,7 @@ include_recipe "mongodb3::mongo_gem"
 
 require 'mongo'
 require 'aws-sdk-opsworks'
-require 'users'
+require '../libraries/users'
 
 ::Chef::Recipe.send(:include, UserHelper)
 
