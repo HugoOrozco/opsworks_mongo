@@ -5,11 +5,21 @@ require 'mongo'
 require 'bson'
 require 'aws-sdk-opsworks'
 require 'aws-sdk-route53'
+require 'users'
 
 # Obtaning mongo instnaces
 this_instance = search("aws_opsworks_instance", "self:true").first
 layer_id = this_instance["layer_ids"][0]
-mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
+user = node['DBUser']
+password = node['DBPass']
+
+begin
+  mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
+  mongo.database_names
+rescue
+  mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
+end
+
 opsworks = Aws::OpsWorks::Client.new(:region => "us-east-1")
 dns = Aws::Route53::Client.new(:region => "#{node['Region']}")
 
@@ -34,7 +44,14 @@ ruby_block 'Configuring_replica_set' do
     init_hosts = []
     master_node_command.instances.each do |host|
       begin
-        check = Mongo::Client.new([ "#{host.hostname}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
+        begin
+          check = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
+          check.database_names
+        rescue
+          user = node['DBUser']
+          password = node['DBPass']
+          check = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
+        end
         check.database.command(config)
         Chef::Log.info "Configuration found"
         init_hosts.push(true)
@@ -146,8 +163,15 @@ ruby_block 'Adding and removing members' do
             health = false
           else
             begin
-              check = Mongo::Client.new([ "#{member["name"]}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
-              check.database_names
+              begin
+                check = Mongo::Client.new([ "#{member["name"]}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
+                check.database_names
+              rescue
+                user = node['DBUser']
+                password = node['DBPass']
+                check = Mongo::Client.new([ "#{member["name"]}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
+                check.database_names
+              end
               old_member = member["name"].split(":")[0].downcase
               rs_new_members << {"_id" => member["_id"], "host" => "#{old_member}:#{node['mongodb3']['config']['mongod']['net']['port']}"}
               i = member["_id"]
@@ -184,9 +208,17 @@ ruby_block 'Adding and removing members' do
             i += 1
             available = true
             Chef::Log.info "New member found, checking availability: " + host.hostname
+            
             begin
-              check = Mongo::Client.new([ "#{host_ip}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
-              check.database_names
+              begin
+                check = Mongo::Client.new([ "#{host_ip}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
+                check.database_names
+              rescue
+                user = node['DBUser']
+                password = node['DBPass']
+                check = Mongo::Client.new([ "#{host_ip}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
+                check.database_names
+              end
             rescue Mongo::Auth::Unauthorized, Mongo::Error => e
               available = false
               info_string  = "Error #{e.class}: #{e.message}"
