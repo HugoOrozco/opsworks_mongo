@@ -5,7 +5,6 @@ require 'mongo'
 require 'bson'
 require 'aws-sdk-opsworks'
 require 'aws-sdk-route53'
-require 'users'
 
 # Obtaning mongo instnaces
 this_instance = search("aws_opsworks_instance", "self:true").first
