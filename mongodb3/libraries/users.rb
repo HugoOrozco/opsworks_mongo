@@ -4,25 +4,25 @@ class Chef::Recipe::UserHelper
     end
 
     def self.create_admin_user()
-        # require 'mongo'
-        # begin
-        #     username = node['DBUser']
-        #     password = node['DBPass']
+        require 'mongo'
+        begin
+            username = node['DBUser']
+            password = node['DBPass']
 
-        #     begin
-        #         client = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
-        #         client.database_names
-        #     rescue
-        #         client = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
-        #     end
-        # rescue
-        #     Chef::Log.info "Failed to connect to database"
-        # end
+            begin
+                client = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
+                client.database_names
+            rescue
+                client = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
+            end
+        rescue
+            Chef::Log.info "Failed to connect to database"
+        end
 
-        # db = client.use('admin')
-        # roles = ['role': 'userAdminAnyDatabase', 'db': 'admin']
-        # create_user(username, password, roles, db, client)
-        print "prueba \n"
+        db = client.use('admin')
+        roles = ['role': 'userAdminAnyDatabase', 'db': 'admin']
+        create_user(username, password, roles, db, client)
+        #print "prueba \n"
 
     end
 
