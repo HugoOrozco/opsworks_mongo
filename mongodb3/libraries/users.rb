@@ -28,15 +28,15 @@ class Chef::Recipe::UserHelper
 
     def self.create_user(username, password, roles, db, client)
         begin
-            if !user_exists?(username, client)
-                db.database.users.create(
-                            username,
-                            password: password,
-                            roles: roles
-                            )
-            else
-                Chef::Log.info "User " + username + " already exists"
-            end
+            #if !user_exists?(username, client)
+            db.database.users.create(
+                        username,
+                        password: password,
+                        roles: roles
+                        )
+            #else
+            #    Chef::Log.info "User " + username + " already exists"
+            #end
         rescue
             Chef::Log.info "Could not create user: " + username
         end
