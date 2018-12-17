@@ -378,7 +378,7 @@ pK/oM7oIKC7tb4Redd7EYIdLdFZIuMuqN/sYQxF31EDoI+I8'
 # security Options : http://docs.mongodb.org/manual/reference/configuration-options/#security-options
 node.default['mongodb3']['config']['mongod']['security']['keyFile'] = '/var/lib/keyfile'
 node.default['mongodb3']['config']['mongod']['security']['clusterAuthMode'] = 'keyFile'
-node.default['mongodb3']['config']['mongod']['security']['authorization'] = 'enabled'
+#node.default['mongodb3']['config']['mongod']['security']['authorization'] = 'enabled'
 
 # Update the mongodb config file
 template node['mongodb3']['mongod']['config_file'] do
