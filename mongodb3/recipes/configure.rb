@@ -16,12 +16,12 @@ userParam = ssm.get_parameter({
     name: "mongoUser",
     with_decryption: false
 })
-user = userParam[:value]
+user = userParam[:parameter][:value]
 passwordParam = ssm.get_parameter({
     name: "mongoPass",
     with_decryption: false
 })
-password = passwordParam[:value]
+password = passwordParam[:parameter][:value]
 
 begin
   mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)

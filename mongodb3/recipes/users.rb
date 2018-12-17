@@ -21,13 +21,13 @@ ruby_block 'Adding Admin User' do
                 name: "mongoUser",
                 with_decryption: false
             })
-            username = usernameParam[:value]
+            username = usernameParam[:parameter][:value]
 
             passwordParam = ssm.get_parameter({
                 name: "mongoPass",
                 with_decryption: false
             })
-            password = passwordParam[:value]
+            password = passwordParam[:parameter][:value]
             port = node['mongodb3']['config']['mongod']['net']['port']
             UserHelper.create_admin_user(username, password, port)
         end
