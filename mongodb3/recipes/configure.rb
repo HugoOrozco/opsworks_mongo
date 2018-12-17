@@ -358,7 +358,7 @@ cookbook_file '/home/ubuntu/backup_cronjob.sh' do
 end
 
 # Key file contents
-node['mongodb3']['config']['key_file_content'] = 'n/XmT8wIOmKSwVqV5UPUcEf23ugCoL6uRVV0C2u9Ilg0+pb2SfS5vWYvXY7UhL6J
+node.default['mongodb3']['config']['key_file_content'] = 'n/XmT8wIOmKSwVqV5UPUcEf23ugCoL6uRVV0C2u9Ilg0+pb2SfS5vWYvXY7UhL6J
 /+orKuREnH9gHSmsgEIPSEMKopGTwsoXpPXW1jWH9TzFt4z8PL81z+/Qz+GuZOWN
 +KMWltIua0EbfLEUw4sZb3xNT33EHjmbbDJWmVO2ngTr2zCb2Xubc0DvoTs2rTMe
 hd/PkkqumLTJINRa4JP7i12cyldhbKWRk9ROVmVoyoyMhrXR38rwvMiD+4SJamtM
@@ -376,9 +376,9 @@ V12wd9ACwNez3e3w9LWxe2/gR8QBO/7zL5P4u7wTiu3OMH7Nyo008JoBRbWARu7t
 pK/oM7oIKC7tb4Redd7EYIdLdFZIuMuqN/sYQxF31EDoI+I8'
 
 # security Options : http://docs.mongodb.org/manual/reference/configuration-options/#security-options
-node['mongodb3']['config']['mongod']['security']['keyFile'] = '/var/lib/keyfile'
-node['mongodb3']['config']['mongod']['security']['clusterAuthMode'] = 'keyFile'
-node['mongodb3']['config']['mongod']['security']['authorization'] = 'disabled'
+node.default['mongodb3']['config']['mongod']['security']['keyFile'] = '/var/lib/keyfile'
+node.default['mongodb3']['config']['mongod']['security']['clusterAuthMode'] = 'keyFile'
+node.default['mongodb3']['config']['mongod']['security']['authorization'] = 'disabled'
 
 # Update the mongodb config file
 template node['mongodb3']['mongod']['config_file'] do
