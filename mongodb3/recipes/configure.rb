@@ -207,10 +207,10 @@ ruby_block 'Adding and removing members' do
             begin
               begin
                 check = Mongo::Client.new([ "#{host_ip}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
-                check.database_names
+                #check.database_names
               rescue
                 check = Mongo::Client.new([ "#{host_ip}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
-                check.database_names
+                #check.database_names
               end
             rescue Mongo::Auth::Unauthorized, Mongo::Error => e
               available = false
