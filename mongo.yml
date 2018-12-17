@@ -29,12 +29,12 @@ Parameters:
   BackUpBucket:
     Type: String
     Description: Backup S3 Bucket
-  DBUser:
+  DBUserParameter:
     Type: String
-    Description: Admin user to connect to the DB.
-  DBPassword:
+    Description: Name of the Parameter Store variable that containes the DB Admin User. Should be on the same AWS Region with this Stack.
+  DBPasswordParameter:
     Type: String
-    Description: Password for the Admin user.
+    Description: Name of the Parameter Store variable that containes the DB Admin Password. Should be on the same AWS Region with this Stack.
 
 
 Resources:
@@ -267,8 +267,8 @@ Resources:
             "Region": "${AWS::Region}",
             "HostedZoneId": "${DomainDNS}",
             "BackUpBucket": "${BackUpBucket}",
-            "DBUser": "${DBUser}",
-            "DBPassword": "${DBPassword}"
+            "DBUser": "${DBUserParameter}",
+            "DBPassword": "${DBPasswordParameter}"
           }
       UseOpsworksSecurityGroups: false
       CustomCookbooksSource:

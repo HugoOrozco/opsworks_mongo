@@ -13,12 +13,12 @@ layer_id = this_instance["layer_ids"][0]
 
 ssm = Aws::SSM::Client.new(:region => "#{node['Region']}")
 userParam = ssm.get_parameter({
-    name: "mongoUser",
+    name: "#{node['DBUser']}",
     with_decryption: false
 })
 user = userParam[:parameter][:value]
 passwordParam = ssm.get_parameter({
-    name: "mongoPass",
+    name: "#{node['DBPassword']}",
     with_decryption: false
 })
 password = passwordParam[:parameter][:value]

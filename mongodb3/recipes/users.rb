@@ -18,13 +18,13 @@ ruby_block 'Adding Admin User' do
             ssm = Aws::SSM::Client.new(:region => "#{node['Region']}")
 
             usernameParam = ssm.get_parameter({
-                name: "mongoUser",
+                name: "#{node['DBUser']}",
                 with_decryption: false
             })
             username = usernameParam[:parameter][:value]
 
             passwordParam = ssm.get_parameter({
-                name: "mongoPass",
+                name: "#{node['DBPassword']}",
                 with_decryption: false
             })
             password = passwordParam[:parameter][:value]
