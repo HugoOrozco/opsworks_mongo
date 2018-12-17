@@ -1,3 +1,4 @@
+include_recipe "mongodb3::mongo_gem"
 
 require 'json'
 require 'mongo'
