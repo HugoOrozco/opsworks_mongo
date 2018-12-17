@@ -12,14 +12,16 @@ this_instance = search("aws_opsworks_instance", "self:true").first
 layer_id = this_instance["layer_ids"][0]
 
 ssm = Aws::SSM::Client.new(:region => "#{node['Region']}")
-user = ssm.get_parameter({
+userParam = ssm.get_parameter({
     name: "mongoUser",
     with_decryption: false
-}).value
-password = ssm.get_parameter({
+})
+user = userParam.value
+passwordParam = ssm.get_parameter({
     name: "mongoPass",
     with_decryption: false
-}).value
+})
+password = passwordParam.value
 
 begin
   mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)

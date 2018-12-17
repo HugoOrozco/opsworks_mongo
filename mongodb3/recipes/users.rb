@@ -17,14 +17,17 @@ ruby_block 'Adding Admin User' do
         if master_node == this_instance["hostname"]
             ssm = Aws::SSM::Client.new(:region => "#{node['Region']}")
 
-            username = ssm.get_parameter({
+            usernameParam = ssm.get_parameter({
                 name: "mongoUser",
                 with_decryption: false
-            }).value
-            password = ssm.get_parameter({
+            })
+            username = usernameParam.value
+
+            passwordParam = ssm.get_parameter({
                 name: "mongoPass",
                 with_decryption: false
-            }).value
+            })
+            password = passwordParam.value
             port = node['mongodb3']['config']['mongod']['net']['port']
             UserHelper.create_admin_user(username, password, port)
         end
