@@ -207,10 +207,8 @@ ruby_block 'Adding and removing members' do
             begin
               begin
                 check = Mongo::Client.new([ "#{host_ip}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
-                #check.database_names
               rescue
                 check = Mongo::Client.new([ "#{host_ip}:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
-                #check.database_names
               end
             rescue Mongo::Auth::Unauthorized, Mongo::Error => e
               available = false
@@ -378,7 +376,6 @@ pK/oM7oIKC7tb4Redd7EYIdLdFZIuMuqN/sYQxF31EDoI+I8'
 # security Options : http://docs.mongodb.org/manual/reference/configuration-options/#security-options
 node.default['mongodb3']['config']['mongod']['security']['keyFile'] = '/var/lib/keyfile'
 node.default['mongodb3']['config']['mongod']['security']['clusterAuthMode'] = 'keyFile'
-#node.default['mongodb3']['config']['mongod']['security']['authorization'] = 'enabled'
 
 # Update the mongodb config file
 template node['mongodb3']['mongod']['config_file'] do
@@ -410,7 +407,7 @@ unless node['mongodb3']['config']['key_file_content'].to_s.empty?
   end
 end
 
-# Start the mongod service
+# Restart the mongod service
 service 'mongod' do
   case node['platform']
     when 'ubuntu'
