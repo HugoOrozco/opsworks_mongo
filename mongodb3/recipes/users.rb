@@ -17,7 +17,10 @@ ruby_block 'Adding Admin User' do
         })
         master_node= master_node_command.instances[0].hostname
         if master_node == this_instance["hostname"]
-            UserHelper.create_admin_user()
+            username = node['DBUser']
+            password = node['DBPass']
+            port = node['mongodb3']['config']['mongod']['net']['port']
+            UserHelper.create_admin_user(username, password, port)
         end
     end
 end

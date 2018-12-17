@@ -3,17 +3,16 @@ class Chef::Recipe::UserHelper
         connection['system.users'].find(user: username).count > 0
     end
 
-    def self.create_admin_user()
+    def self.create_admin_user(username, password, port)
         require 'mongo'
 
-        username = node['DBUser']
-        password = node['DBPass']
+        
 
         begin
-            client = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
+            client = Mongo::Client.new([ "127.0.0.1:#{port}" ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
             client.database_names
         rescue
-            client = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
+            client = Mongo::Client.new([ "127.0.0.1:#{port}" ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
         end
         
         db = client.use('admin')
