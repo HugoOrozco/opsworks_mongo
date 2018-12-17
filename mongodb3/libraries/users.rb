@@ -40,21 +40,14 @@ class Chef::Recipe::UserHelper
 
     end
 
-    def self.create_all_users()
+    def self.create_all_users(users, port)
         require 'mongo'
 
-        users = []
-        roles = ['role': 'userAdminAnyDatabase', 'db': 'admin']
-        user = [{'username': 'User1', 'password': 'test', 'roles': roles}]
-        users.push(user)
-        user2 = [{'username': 'User2', 'password': 'test', 'roles': roles}]
-        users.push(user2)
-
         begin
-            client = Mongo::Client.new([ '127.0.0.1:27017' ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
+            client = Mongo::Client.new([ "127.0.0.1:#{port}" ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
             client.database_names
         rescue
-            client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
+            client = Mongo::Client.new([ "127.0.0.1:#{port}" ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
         end
         
         db = client.use('admin')

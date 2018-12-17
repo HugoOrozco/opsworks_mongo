@@ -5,12 +5,21 @@ require 'mongo'
 require 'bson'
 require 'aws-sdk-opsworks'
 require 'aws-sdk-route53'
+require 'aws-sdk-ssm'
 
 # Obtaning mongo instnaces
 this_instance = search("aws_opsworks_instance", "self:true").first
 layer_id = this_instance["layer_ids"][0]
-user = "Admin"
-password = "test"
+
+ssm = Aws::SSM::Client.new(:region => "#{node['Region']}")
+user = ssm.get_parameter({
+    name: "mongoUser",
+    with_decryption: false
+})
+password = ssm.get_parameter({
+    name: "mongoPass",
+    with_decryption: false
+})
 
 begin
   mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)

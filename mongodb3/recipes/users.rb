@@ -1,6 +1,6 @@
 require 'mongo'
 require 'aws-sdk-opsworks'
-
+require 'aws-sdk-ssm'
 
 # Obtaning mongo instnaces
 this_instance = search("aws_opsworks_instance", "self:true").first
@@ -15,8 +15,16 @@ ruby_block 'Adding Admin User' do
         })
         master_node= master_node_command.instances[0].hostname
         if master_node == this_instance["hostname"]
-            username = "Admin"
-            password = "test"
+            ssm = Aws::SSM::Client.new(:region => "#{node['Region']}")
+
+            username = ssm.get_parameter({
+                name: "mongoUser",
+                with_decryption: false
+            })
+            password = ssm.get_parameter({
+                name: "mongoPass",
+                with_decryption: false
+            })
             port = node['mongodb3']['config']['mongod']['net']['port']
             UserHelper.create_admin_user(username, password, port)
         end
