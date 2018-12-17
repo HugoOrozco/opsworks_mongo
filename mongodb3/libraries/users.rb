@@ -28,7 +28,7 @@ class Chef::Recipe::UserHelper
 
     def self.create_user(username, password, roles, db, client)
         begin
-            !user_exists?(username, client)
+            if !user_exists?(username, client)
             db.database.users.create(
                         username,
                         password: password,
