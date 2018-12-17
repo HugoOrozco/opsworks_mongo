@@ -20,11 +20,11 @@ ruby_block 'Adding Admin User' do
             username = ssm.get_parameter({
                 name: "mongoUser",
                 with_decryption: false
-            })
+            }).value
             password = ssm.get_parameter({
                 name: "mongoPass",
                 with_decryption: false
-            })
+            }).value
             port = node['mongodb3']['config']['mongod']['net']['port']
             UserHelper.create_admin_user(username, password, port)
         end

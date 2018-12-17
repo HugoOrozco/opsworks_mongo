@@ -182,7 +182,8 @@ Resources:
                                   "route53:ListResourceRecordSets",
                                   "route53:DeleteHostedZone",
                                   "route53:GetChange",
-                                  "cloudwatch:SetAlarmState"
+                                  "cloudwatch:SetAlarmState",
+                                  "ssm:GetParameter"
                               ],
                               "Resource": [
                                   "*"
