@@ -390,6 +390,26 @@ template node['mongodb3']['mongod']['config_file'] do
   helpers Mongodb3Helper
 end
 
+unless node['mongodb3']['config']['key_file_content'].to_s.empty?
+  # Create the key file if it is not exist
+  key_file = node['mongodb3']['config']['mongod']['security']['keyFile']
+
+  # Create the directory for key file
+  directory File.dirname(key_file).to_s do
+    action :create
+    owner node['mongodb3']['user']
+    group node['mongodb3']['group']
+    recursive true
+  end
+
+  file key_file do
+    content node['mongodb3']['config']['key_file_content']
+    mode '0600'
+    owner node['mongodb3']['user']
+    group node['mongodb3']['group']
+  end
+end
+
 # Start the mongod service
 service 'mongod' do
   case node['platform']
