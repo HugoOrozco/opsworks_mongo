@@ -20,7 +20,7 @@ class Chef::Recipe::UserHelper
         end
         
         db = client.use('admin')
-        roles = ['role': 'root', 'db': 'admin']
+        roles = ['role': 'userAdminAnyDatabase', 'db': 'admin']
         create_user(username, password, roles, db, client)
         #print "prueba \n"
 
