@@ -37,8 +37,8 @@ class Chef::Recipe::UserHelper
             #else
             #    Chef::Log.info "User " + username + " already exists"
             #end
-        rescue
-            Chef::Log.info "Could not create user: " + username
+        rescue Exception => ex
+            Chef::Log.info "Could not create user: " + username + ". Error: " + ex.message
         end
 
     end
