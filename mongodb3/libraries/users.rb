@@ -1,6 +1,10 @@
 class Chef::Recipe::UserHelper
     def self.user_exists?(username, connection)
-        connection['system.users'].find(user: username).count > 0
+        begin
+            connection['system.users'].find(user: username).count > 0
+        rescue
+            Chef::Log.info "Could not verify user existence"
+        end
     end
 
     def self.create_admin_user(username, password, port)
@@ -16,7 +20,7 @@ class Chef::Recipe::UserHelper
         end
         
         db = client.use('admin')
-        roles = ['role': 'userAdminAnyDatabase', 'db': 'admin']
+        roles = ['role': 'root', 'db': 'admin']
         create_user(username, password, roles, db, client)
         #print "prueba \n"
 
