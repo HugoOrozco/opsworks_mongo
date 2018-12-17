@@ -13,10 +13,10 @@ class Chef::Recipe::UserHelper
         
 
         begin
-            client = Mongo::Client.new([ "127.0.0.1:#{port}" ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
-            #client.database_names
-        rescue
             client = Mongo::Client.new([ "127.0.0.1:#{port}" ], :database => "admin", :user => username, :password => password,:connect => "direct", :server_selection_timeout => 5)
+            client.database_names
+        rescue
+            client = Mongo::Client.new([ "127.0.0.1:#{port}" ],:database => "admin" ,:connect => "direct", :server_selection_timeout => 5)
         end
         
         db = client.use('admin')
