@@ -31,10 +31,10 @@ Parameters:
     Description: Backup S3 Bucket
   DBUser:
     Type: String
-    Description: Name of the Parameter Store variable that containes the DB Admin User. Should be on the same AWS Region with this Stack.
+    Description: Admin User Name
   DBPassword:
     Type: String
-    Description: Name of the Parameter Store variable that containes the DB Admin Password. Should be on the same AWS Region with this Stack.
+    Description: Password for Admin User
 
 
 Resources:
@@ -288,7 +288,7 @@ Resources:
       UseOpsworksSecurityGroups: false
       CustomCookbooksSource:
         Type: git
-        Url: "https://github.com/brayest/opsworks_mongo.git"
+        Url: "https://github.com/HugoOrozco/opsworks_mongo.git"
       ConfigurationManager:
         Name: Chef
         Version: 12
