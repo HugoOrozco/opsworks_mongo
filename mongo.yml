@@ -302,7 +302,7 @@ Resources:
           VolumeType: gp2
       EnableAutoHealing: false
       AutoAssignElasticIps: false
-      AutoAssignPublicIps: true
+      AutoAssignPublicIps: false
       CustomRecipes:
         Setup:
           - mongodb3::default
