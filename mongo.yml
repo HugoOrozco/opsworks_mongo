@@ -38,6 +38,9 @@ Parameters:
   MongoPort:
     Type: Number
     Description: Port number where Mongo Service will be exposed.
+  PartitionSize:
+    Type: Number
+    Description: Data partition size in GBs
 
 Resources:
   DBUserParameter:
@@ -108,13 +111,32 @@ Resources:
           ToPort: '3389'
           CidrIp: 70.169.227.36/32
         - IpProtocol: tcp
-          Description: "Mongo Port"
+          Description: "Mongo PADI ATT WAN"
           FromPort: !Ref MongoPort
           ToPort: !Ref MongoPort
-          CidrIp: 0.0.0.0/0
+          CidrIp: 12.165.253.4/32
+        - IpProtocol: tcp
+          Description: "Mongo PADI Sprint WAN"
+          FromPort: !Ref MongoPort
+          ToPort: !Ref MongoPort
+          CidrIp: 206.107.76.4/32
+        - IpProtocol: tcp
+          Description: "Mongo PADI Wireless Network"
+          FromPort: !Ref MongoPort
+          ToPort: !Ref MongoPort
+          CidrIp: 70.169.227.36/32
         SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: -1
+
+  SGBaseIngress:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupName: !Ref SecurityGroup
+      IpProtocol: tcp
+      FromPort: !Ref MongoPort
+      ToPort: !Ref MongoPort
+      SourceSecurityGroupId: !Ref SecurityGroup
 
   OpsworksEc2Profile:
     Type: AWS::IAM::InstanceProfile
@@ -362,7 +384,7 @@ Resources:
       VolumeConfigurations:
         - MountPoint: /data
           NumberOfDisks: 1
-          Size: 500
+          Size: !Ref PartitionSize
           VolumeType: gp2
       EnableAutoHealing: false
       AutoAssignElasticIps: false
