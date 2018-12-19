@@ -107,6 +107,11 @@ Resources:
           FromPort: '3389'
           ToPort: '3389'
           CidrIp: 70.169.227.36/32
+        - IpProtocol: tcp
+          Description: "Mongo Port"
+          FromPort: !Ref MongoPort
+          ToPort: !Ref MongoPort
+          CidrIp: 0.0.0.0/0
         SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: -1
