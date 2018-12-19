@@ -21,6 +21,8 @@ include_recipe 'mongodb3::package_repo'
 
 this_instance = search("aws_opsworks_instance", "self:true").first
 
+node.default['mongodb3']['config']['mongod']['net']['port'] = node['DBPort']
+
 # Install MongoDB package
 install_package = %w(mongodb-org-server mongodb-org-shell mongodb-org-tools)
 

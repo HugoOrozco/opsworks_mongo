@@ -35,7 +35,9 @@ Parameters:
   DBPassword:
     Type: String
     Description: Password for Admin User
-
+  MongoPort:
+    Type: Integer
+    Description: Port number where Mongo Service will be exposed.
 
 Resources:
   DBUserParameter:
@@ -61,9 +63,50 @@ Resources:
         VpcId: !Ref VpcId
         SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '0'
-          ToPort: '65535'
-          CidrIp: 0.0.0.0/0
+          Description: "PADI ATT WAN"
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 12.165.253.4/32
+        - IpProtocol: tcp
+          Description: "PADI Sprint WAN"
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 206.107.76.4/32
+        - IpProtocol: tcp
+          Description: "PADI Wireless Network"
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 70.169.227.36/32
+        - IpProtocol: tcp
+          Description: "PADI ATT WAN"
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 12.165.253.4/32
+        - IpProtocol: tcp
+          Description: "PADI Sprint WAN"
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 206.107.76.4/32
+        - IpProtocol: tcp
+          Description: "PADI Wireless Network"
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 70.169.227.36/32
+        - IpProtocol: tcp
+          Description: "PADI ATT WAN"
+          FromPort: '3389'
+          ToPort: '3389'
+          CidrIp: 12.165.253.4/32
+        - IpProtocol: tcp
+          Description: "PADI Sprint WAN"
+          FromPort: '3389'
+          ToPort: '3389'
+          CidrIp: 206.107.76.4/32
+        - IpProtocol: tcp
+          Description: "PADI Wireless Network"
+          FromPort: '3389'
+          ToPort: '3389'
+          CidrIp: 70.169.227.36/32
         SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: -1
@@ -283,7 +326,8 @@ Resources:
             "HostedZoneId": "${DomainDNS}",
             "BackUpBucket": "${BackUpBucket}",
             "DBUser": "${DBUserParameter}",
-            "DBPassword": "${DBPasswordParameter}"
+            "DBPassword": "${DBPasswordParameter}",
+            "DBPort": "${MongoPort}"
           }
       UseOpsworksSecurityGroups: false
       CustomCookbooksSource:
@@ -307,7 +351,7 @@ Resources:
     Type: AWS::OpsWorks::Layer
     Properties:
       StackId: !Ref OpsWorksStack
-      Name: "Calhoun"
+      Name: "mongo"
       Type: custom
       Shortname: "mongo"
       VolumeConfigurations:
@@ -317,7 +361,7 @@ Resources:
           VolumeType: gp2
       EnableAutoHealing: false
       AutoAssignElasticIps: false
-      AutoAssignPublicIps: false
+      AutoAssignPublicIps: true
       CustomRecipes:
         Setup:
           - mongodb3::default
@@ -330,5 +374,5 @@ Resources:
         - !Ref SecurityGroup
       CustomJson: !Sub |
           {
-            "HostID": "monogo"
+            "HostID": "mongo"
           }
