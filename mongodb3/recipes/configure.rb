@@ -11,6 +11,8 @@ require 'aws-sdk-ssm'
 this_instance = search("aws_opsworks_instance", "self:true").first
 layer_id = this_instance["layer_ids"][0]
 
+node.default['mongodb3']['config']['mongod']['net']['port'] = node['DBPort']
+
 ssm = Aws::SSM::Client.new(:region => "#{node['Region']}")
 userParam = ssm.get_parameter({
     name: "#{node['DBUser']}",
