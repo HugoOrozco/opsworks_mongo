@@ -333,7 +333,7 @@ ruby_block 'Adding and removing members' do
                 if status == "INSYNC"
                   dnsready = true
                 else
-                  Chef::Log::Info "Host not propagated on DNS, retrying in 15 seconds"
+                  Chef::Log::info "Host not propagated on DNS, retrying in 15 seconds"
                   sleep(15)
                 end
               end
