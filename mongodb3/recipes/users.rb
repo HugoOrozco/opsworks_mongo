@@ -6,6 +6,8 @@ require 'aws-sdk-ssm'
 this_instance = search("aws_opsworks_instance", "self:true").first
 layer_id = this_instance["layer_ids"][0]
 
+node.default['mongodb3']['config']['mongod']['net']['port'] = node['DBPort']
+
 opsworks = Aws::OpsWorks::Client.new(:region => "us-east-1")
 
 ruby_block 'Adding Admin User' do

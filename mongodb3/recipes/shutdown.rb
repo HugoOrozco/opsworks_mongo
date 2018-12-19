@@ -5,11 +5,33 @@ require 'mongo'
 require 'bson'
 require 'aws-sdk-opsworks'
 require 'aws-sdk-route53'
+require 'aws-sdk-ssm'
 
 # Obtaning mongo instnaces
 this_instance = search("aws_opsworks_instance", "self:true").first
 layer_id = this_instance["layer_ids"][0]
-mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
+
+node.default['mongodb3']['config']['mongod']['net']['port'] = node['DBPort']
+
+ssm = Aws::SSM::Client.new(:region => "#{node['Region']}")
+userParam = ssm.get_parameter({
+    name: "#{node['DBUser']}",
+    with_decryption: false
+})
+user = userParam[:parameter][:value]
+passwordParam = ssm.get_parameter({
+    name: "#{node['DBPassword']}",
+    with_decryption: false
+})
+password = passwordParam[:parameter][:value]
+
+begin
+  mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :user => user, :password => password, :connect => "direct", :server_selection_timeout => 5)
+  mongo.database_names
+rescue
+  mongo = Mongo::Client.new([ "127.0.0.1:#{node['mongodb3']['config']['mongod']['net']['port']}" ], :database => "admin", :connect => "direct", :server_selection_timeout => 5)
+end
+
 opsworks = Aws::OpsWorks::Client.new(:region => "us-east-1")
 dns = Aws::Route53::Client.new(:region => "#{node['Region']}")
 
