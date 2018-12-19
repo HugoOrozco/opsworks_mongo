@@ -36,7 +36,7 @@ Parameters:
     Type: String
     Description: Password for Admin User
   MongoPort:
-    Type: Integer
+    Type: Number
     Description: Port number where Mongo Service will be exposed.
 
 Resources:
